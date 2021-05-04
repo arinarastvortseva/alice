@@ -1,40 +1,34 @@
-from flask import Flask, request
+# Функция для непосредственной обработки диалога.
+def handle_dialog(request, response, user_storage):
+    if request.is_new_session:
 
-app = Flask(__name__)
+        response.set_text('Вход: объясняловка, что вообще происходит и как жить дальше. Предложение поиграть.')
+        response.set_buttons([{'title': 'я хочу играть!', 'hide': True}, {'title': 'помощь', 'hide': True},
+                             {'title': 'выход', 'hide': True}])
 
-@app.route('/alice', methods=['POST'])
-def resp():
-    text = request.json.get('request', {}).get('command')
-
-    end = False
-
-    if text == 'выход':
-        response_text = 'Всего хорошего! Приходите позже, мы вас ждём!'
-        end = True
-    elif text:
-        response_text = 'Жили были трали вали тут должен быть сценарий'
+        return response, user_storage
     else:
-        response_text = 'Добро пожаловать в игровой навык, который еще не разработан! Надеюсь еще не дедлайн!!!!!'
+        # Обрабатываем ответ пользователя.
+        if request.command.lower() == "выход":
+            response.set_text("Спасибо за игру!\n Надеюсь тебе понравилось!")
+            response.set_end_session(True)
+            user_storage = {}
 
-    response = {
-        'response': {
-            'text': response_text,
-            "card": {
-                "type": "BigImage",
-                "image_id": "965417/f8b5c546452c24dd1e44",
-                "title": "Супер пупер мега квест",
-                "description": "тут должно быть краткое описание что вообще происходит мрпсрачрачпяпвя",
+            return response, user_storage
 
-            },
-            'end_session': end,
-            'buttons': [
-                {'title': 'Я хочу начать игру!', 'hide': True},
-                {'title': 'выход', 'hide': True},
-            ]
-        },
-        'version': '1.0'
-    }
-    return response
+        elif request.command.lower() == 'помощь':
+            response.set_text('Шаг1: идёт жалобная история про Элитию. Предлагается 2 варианта развития событий\n'
+                              'Для завершения игры скажите "конец игры".\n')
+            response.set_buttons([{'title': 'вариант 1', 'hide': True}, {'title': 'вариант2', 'hide': True},
+                                  {'title': 'помощь', 'hide': True}])
+            user_storage = {}
+            return response, user_storage
 
+        elif response.command.lower() == 'вариант 1':
 
-app.run('0.0.0.0', port=5000, debug=True)
+            response.set_text("Шаг 2.1\n Подождать еще один день и быть спасенной принцем. Ура!")
+            response.set_buttons([{'title': 'приготовиться быть спасенной', 'hide': True}])
+
+            user_storage = {}
+            return response, user_storage
+
