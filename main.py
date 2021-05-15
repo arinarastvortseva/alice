@@ -6,22 +6,21 @@ with open("script-for-alice.csv", "r", encoding="utf8") as csvfile:
     data = csv.DictReader(csvfile, delimiter=",", quotechar=" ")
     events = {x['event']: [x['action'], x['branch']] for x in data}
 
+
 # Функция для непосредственной обработки диалога.
 def handle_dialog(request, response, user_storage):
     if request.is_new_session:
         user_storage = {}
-        response.set_text('объяснялочка что здесь происходит и начало, чтобы уже можно было выбрат разветвление!''Для завершения игры скажите "конец игры".\n')
+        response.set_text('объяснялочка что здесь происходит и начало, чтобы уже можно было выбрат разветвление!'
+                          'Для завершения игры скажите "конец игры".\n')
         response.set_buttons([{'title': 'branch 1', 'hide': True},
                              {'title': 'branch 2', 'hide': True}])
-
-
         return response, user_storage
 
     else:
         # Обрабатываем ответ пользователя.
         if request.command.lower() == "конец игры":
-            response.set_text("Спасибо за игру!\n"
-                                +"До встречи!")
+            response.set_text("Спасибо за игру!\n" + "До встречи!")
             response.set_end_session(True)
             user_storage = {}
 
@@ -45,12 +44,10 @@ def handle_dialog(request, response, user_storage):
             inf_list = cycle(a)
             user_storage['questions'] = inf_list
 
-
             event = next(user_storage['questions'])
             action = events[event][0]
             print(action)
             buttons = get_buttons(action)
-
 
             user_storage["event"] = event
             user_storage["action"] = action
@@ -92,4 +89,3 @@ def get_buttons(action):
     print(actions)
     print(action)
     return buttons
-
