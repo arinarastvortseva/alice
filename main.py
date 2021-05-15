@@ -27,26 +27,16 @@ def handle_dialog(request, response, user_storage):
             return response, user_storage
 
         elif request.command.lower() in ['branch 1', 'branch 2']:
-            # _a = list(filter(lambda x: request.command.lower() == events[x][1], events.keys()))
-            # print(_a[0], _a[1])
-            # inf_list = _a
-            # print(inf_list)
-            # user_storage['questions'] = inf_list
             a = []
             b = []
-            print(events.keys())
             for x in events.keys():
                 a.append(x)
                 b.append(events[x][0])
-            print(a)
-            print(b)
-            print(a[0], a[1])
             inf_list = cycle(a)
             user_storage['questions'] = inf_list
 
             event = next(user_storage['questions'])
             action = events[event][0]
-            print(action)
             buttons = get_buttons(action)
 
             user_storage["event"] = event
@@ -61,9 +51,7 @@ def handle_dialog(request, response, user_storage):
         elif request.command.lower() == user_storage["action"]:
             # Пользователь выбрал что-то.
             event = next(user_storage['questions'])
-            print(event)
             action = events[event][0]
-            print(action)
             buttons = get_buttons(action)
             user_storage["event"] = event
             user_storage["action"] = action
@@ -86,6 +74,4 @@ def get_buttons(action):
     actions = ''.join(actions)
 
     buttons = [{'title': actions, 'hide': True}]
-    print(actions)
-    print(action)
     return buttons
