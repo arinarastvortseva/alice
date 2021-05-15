@@ -16,11 +16,10 @@ logging.basicConfig(level=logging.DEBUG)
 # Хранилище данных о сессиях.
 session_storage = {}
 
+
 # Задаем параметры приложения Flask.
 @app.route('/alice', methods=['POST'])
-
 def main():
-
     # Функция получает тело запроса и возвращает ответ.
     alice_request = AliceRequest(request.json)
     logging.info('Request: {}'.format(alice_request))
