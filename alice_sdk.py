@@ -55,8 +55,11 @@ class AliceResponse(object):
     def set_end_session(self, flag):
         self._response_dict['response']['end_session'] = flag
 
-    def set_imagine(self, image):
-        self._response_dict['response']['imagine'] = image
+    def set_image(self, image, event):
+        self._response_dict['response']['card'] = {}
+        self._response_dict['response']['card']['type'] = 'BigImage'
+        self._response_dict['response']['card']['description'] = event
+        self._response_dict['response']['card']['image_id'] = image
 
     def __str__(self):
         return self.dumps()
