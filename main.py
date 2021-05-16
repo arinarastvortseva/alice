@@ -41,8 +41,7 @@ def handle_dialog(request, response, user_storage):
             user_storage['questions'] = inf_list
             user_storage['pictures'] = image_list
 
-            event = next(user_storage['questions'])
-            # image = next(user_storage['pictures'])
+            event = next(user_storage['questions']
             action = events[event][0]
             image = events[event][2]
             buttons = get_buttons(action)
@@ -73,7 +72,7 @@ def handle_dialog(request, response, user_storage):
             user_storage['pictures'] = image_list
 
             event = next(user_storage['questions'])
-            # image = next(user_storage['pictures'])
+            
             action = events[event][0]
             image = events[event][2]
             buttons = get_buttons(action)
@@ -99,8 +98,7 @@ def handle_dialog(request, response, user_storage):
             response.set_buttons(user_storage['buttons'])
             response.set_image(image, event)
             return response, user_storage
-        # buttons = get_buttons(user_storage['action'])
-        # response.set_buttons(buttons)
+       
         response.set_text(format(user_storage['event']))
         return response, user_storage
 
