@@ -11,20 +11,34 @@
 
 ## Как играть?
 Вам необходимо пройти по этой ссылке и нажать “Начать игру!”
+
+А еще вы можете сказать "Алиса, запусти квест 'Путь истины'" и все заработает!
+
 *гифка с действием*
 
 ## Какие мини-игры здесь содержатся?
-### название
+### Виселица
 ![pic](https://i.pinimg.com/236x/a1/79/1c/a1791cda5bbe9220878f8c36b5791331--flower-clipart-tornado.jpg?nii=t)
 
-### название
-![pic](https://i.pinimg.com/236x/a1/79/1c/a1791cda5bbe9220878f8c36b5791331--flower-clipart-tornado.jpg?nii=t)
-
-### название
-![pic](https://i.pinimg.com/236x/a1/79/1c/a1791cda5bbe9220878f8c36b5791331--flower-clipart-tornado.jpg?nii=t)
-
-### название
-![pic](https://i.pinimg.com/236x/a1/79/1c/a1791cda5bbe9220878f8c36b5791331--flower-clipart-tornado.jpg?nii=t)
 
 ## Как работает программа?
-*пример кода*
+Код написан полностью на языке Python
+```
+def handle_dialog(request, response, user_storage):
+
+    if request.is_new_session:
+        user_storage = {}
+        response.set_text('объяснялочка что здесь происходит и начало, чтобы уже можно было выбрат разветвление!'
+                          'Для завершения игры скажите "конец игры".\n')
+        response.set_buttons([{'title': 'branch 1', 'hide': True},
+                             {'title': 'branch 2', 'hide': True}])
+        return response, user_storage
+
+    else:
+        # Обрабатываем ответ пользователя.
+        if request.command.lower() == 'конец игры':
+            response.set_text('Спасибо за игру!\n' + 'До встречи!')
+            response.set_end_session(True)
+            user_storage = {}
+            return response, user_storage
+```
