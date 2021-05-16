@@ -1,7 +1,6 @@
 import csv
 from itertools import cycle
-from images import Image
-from alice_sdk import AliceResponse
+
 
 with open('script-for-alice.csv', 'r', encoding='utf8') as csvfile:
     data = csv.DictReader(csvfile, delimiter=';', quotechar=' ')
