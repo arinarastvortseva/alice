@@ -3,13 +3,13 @@ from itertools import cycle
 from images import Image
 from alice_sdk import AliceResponse
 
-with open("script-for-alice.csv", "r", encoding="utf8") as csvfile:
-    data = csv.DictReader(csvfile, delimiter=";", quotechar=" ")
+with open('script-for-alice.csv', 'r', encoding='utf8') as csvfile:
+    data = csv.DictReader(csvfile, delimiter=';', quotechar=' ')
     events = {x['event']: [x['action'], x['branch'], x['image']] for x in data}
+
 
 # Функция для непосредственной обработки диалога.
 def handle_dialog(request, response, user_storage):
-
 
     if request.is_new_session:
         user_storage = {}
@@ -21,8 +21,8 @@ def handle_dialog(request, response, user_storage):
 
     else:
         # Обрабатываем ответ пользователя.
-        if request.command.lower() == "конец игры":
-            response.set_text("Спасибо за игру!\n" + "До встречи!")
+        if request.command.lower() == 'конец игры':
+            response.set_text('Спасибо за игру!\n' + 'До встречи!')
             response.set_end_session(True)
             user_storage = {}
 
@@ -42,22 +42,18 @@ def handle_dialog(request, response, user_storage):
             user_storage['questions'] = inf_list
             user_storage['pictures'] = image_list
 
-
             event = next(user_storage['questions'])
-            #image = next(user_storage['pictures'])
+            # image = next(user_storage['pictures'])
             action = events[event][0]
             image = events[event][2]
             buttons = get_buttons(action)
 
-
-            user_storage["event"] = event
-            user_storage["action"] = action
-            user_storage["buttons"] = buttons
-            response.set_text(format(user_storage["event"]))
-            response.set_buttons(user_storage["buttons"])
+            user_storage['event'] = event
+            user_storage['action'] = action
+            user_storage['buttons'] = buttons
+            response.set_text(format(user_storage['event']))
+            response.set_buttons(user_storage['buttons'])
             response.set_image(image, event)
-
-
             return response, user_storage
 
         elif request.command.lower() in ['branch 2']:
@@ -77,40 +73,36 @@ def handle_dialog(request, response, user_storage):
             user_storage['questions'] = inf_list
             user_storage['pictures'] = image_list
 
-
             event = next(user_storage['questions'])
-            #image = next(user_storage['pictures'])
+            # image = next(user_storage['pictures'])
             action = events[event][0]
             image = events[event][2]
             buttons = get_buttons(action)
 
-
-            user_storage["event"] = event
-            user_storage["action"] = action
-            user_storage["buttons"] = buttons
-            response.set_text(format(user_storage["event"]))
-            response.set_buttons(user_storage["buttons"])
+            user_storage['event'] = event
+            user_storage['action'] = action
+            user_storage['buttons'] = buttons
+            response.set_text(format(user_storage['event']))
+            response.set_buttons(user_storage['buttons'])
             response.set_image(image, event)
-
-
             return response, user_storage
 
-        elif request.command.lower() == user_storage["action"]:
+        elif request.command.lower() == user_storage['action']:
             # Пользователь выбрал что-то.
             event = next(user_storage['questions'])
             action = events[event][0]
             image = events[event][2]
             buttons = get_buttons(action)
-            user_storage["event"] = event
-            user_storage["action"] = action
-            user_storage["buttons"] = buttons
-            response.set_text(format(user_storage["event"]))
-            response.set_buttons(user_storage["buttons"])
+            user_storage['event'] = event
+            user_storage['action'] = action
+            user_storage['buttons'] = buttons
+            response.set_text(format(user_storage['event']))
+            response.set_buttons(user_storage['buttons'])
             response.set_image(image, event)
             return response, user_storage
         # buttons = get_buttons(user_storage['action'])
         # response.set_buttons(buttons)
-        response.set_text(format(user_storage["event"]))
+        response.set_text(format(user_storage['event']))
         return response, user_storage
 
 
@@ -120,5 +112,4 @@ def get_buttons(action):
 
     buttons = [{'title': actions, 'hide': True}]
     return buttons
-
 
