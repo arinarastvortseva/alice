@@ -1,8 +1,6 @@
 import csv
-
 """ Модуль для работы с csv-файлами"""
 from itertools import cycle
-
 """Создать бесконечный итератор"""
 
 with open('script-for-alice.csv', 'r', encoding='utf8') as csvfile:
