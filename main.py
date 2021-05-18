@@ -1,6 +1,8 @@
 import csv
+
 """ Модуль для работы с csv-файлами"""
 from itertools import cycle
+
 """Создать бесконечный итератор"""
 
 with open('script-for-alice.csv', 'r', encoding='utf8') as csvfile:
@@ -41,67 +43,25 @@ def handle_dialog(request, response, user_storage):
             return response, user_storage
 
         elif request.command in ['подождать еще день']:
-            a = []
-            b = []
-            
-            for x in events.keys():
-                a.append(x)
-                b.append(events[x][2])
-            inf_list = cycle(a)
-            image_list = cycle(b)
-            user_storage['questions'] = inf_list
-            user_storage['pictures'] = image_list
+            user_storage = choose_branch('подождать еще день')
+            user_storage, image, event = response_to_user()
 
-            event = next(user_storage['questions'])
-            action = events[event][0]
-            image = events[event][2]
-            buttons = get_buttons(action)
-
-            user_storage['event'] = event
-            user_storage['action'] = action
-            user_storage['buttons'] = buttons
             response.set_text(user_storage['event'])
             response.set_buttons(user_storage['buttons'])
             response.set_image(image, event)
             return response, user_storage
 
         elif request.command in ['выбираться самой']:
-            a = []
-            b = []
+            user_storage = choose_branch('выбираться самой')
+            user_storage, image, event = response_to_user()
 
-            for x in events.keys():
-                if events[x][1] == 'выбираться самой':
-                    a.append(x)
-                    b.append(events[x][2])
-
-            inf_list = cycle(a)
-            image_list = cycle(b)
-
-            user_storage['questions'] = inf_list
-            user_storage['pictures'] = image_list
-
-            event = next(user_storage['questions'])
-            action = events[event][0]
-            image = events[event][2]
-            buttons = get_buttons(action)
-
-            user_storage['event'] = event
-            user_storage['action'] = action
-            user_storage['buttons'] = buttons
             response.set_text(user_storage['event'])
             response.set_buttons(user_storage['buttons'])
             response.set_image(image, event)
             return response, user_storage
 
         elif request.command == user_storage['action']:
-            event = next(user_storage['questions'])
-            action = events[event][0]
-            image = events[event][2]
-            buttons = get_buttons(action)
-
-            user_storage['event'] = event
-            user_storage['action'] = action
-            user_storage['buttons'] = buttons
+            user_storage, image, event = response_to_user()
 
             response.set_text(user_storage['event'])
             response.set_buttons(user_storage['buttons'])
@@ -118,3 +78,32 @@ def get_buttons(action):
     actions = ''.join(actions)
     buttons = [{'title': actions, 'hide': True}]
     return buttons
+
+
+def choose_branch(branch):
+    """ Функция выбора сюжета для ветки """
+    a = []
+    b = []
+    for x in events.keys():
+        if events[x][1] == branch:
+            a.append(x)
+            b.append(events[x][2])
+    inf_list = cycle(a)
+    image_list = cycle(b)
+    user_storage = globals()
+    user_storage['episodes'], user_storage['pictures'] = inf_list, image_list
+    return user_storage
+
+
+def response_to_user():
+    """ Функция ответа пользователя"""
+    user_storage = globals()
+    event = next(user_storage['episodes'])
+    action = events[event][0]
+    image = events[event][2]
+    buttons = get_buttons(action)
+
+    user_storage['event'] = event
+    user_storage['action'] = action
+    user_storage['buttons'] = buttons
+    return user_storage, image, event
